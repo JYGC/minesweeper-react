@@ -36,8 +36,8 @@ function Square(props) {
 }
 
 export function Board() {
-  const boardSize = 15;
-  const numberOfMines = 5;
+  const boardSize = 8;
+  const numberOfMines = 8;
 
   let preBoard = new Array(boardSize).fill().map(
     () => new Array(boardSize).fill().map(
