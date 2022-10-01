@@ -2,6 +2,9 @@ import './Board.css';
 import { useState } from "react";
 import Confetti from 'react-confetti';
 
+const boardSize = 5 + Math.floor(Math.random() * 11);
+const numberOfMines = 3 + Math.floor(Math.random() * 5);
+
 const squareState = {
   digged: false,
   hasMine: false,
@@ -26,7 +29,7 @@ function Square(props) {
     }
   }
   return (
-    <button
+    <button className="square"
       disabled={props.squareState.digged}
       onClick={props.onClick} onContextMenu={(e) => { e.preventDefault(); props.onContextMenu(); }}
       style={ props.squareState.mineExploded ? {backgroundColor: "darkred"} : {}}>
@@ -36,8 +39,6 @@ function Square(props) {
 }
 
 export function Board() {
-  const boardSize = 8;
-  const numberOfMines = 8;
 
   let preBoard = new Array(boardSize).fill().map(
     () => new Array(boardSize).fill().map(
@@ -54,8 +55,8 @@ export function Board() {
   for (let m = 1; m <= numberOfMines; m++) {
     let newMineAdded = false;
     while (!newMineAdded) {
-      let randomRow = Math.floor(Math.random() * boardSize)
-      let randomCol = Math.floor(Math.random() * boardSize)
+      let randomRow = Math.floor(Math.random() * boardSize);
+      let randomCol = Math.floor(Math.random() * boardSize);
       if (!preBoard[randomRow][randomCol].hasMine) preBoard[randomRow][randomCol].hasMine = newMineAdded = true;
     }
   }
@@ -146,19 +147,25 @@ export function Board() {
   return (
     <div>
       {hasWon ? <Confetti width={celebrationWidth} height={celebrationHeight} /> : ""}
-      <div className="winlosemsg-container">{winLoseMessage}</div>
+      <div className="msg-container">{(winLoseMessage.length === 0) ? `Find ${numberOfMines} hidden mines` : winLoseMessage}</div>
       <div className="board-container" style={ (winLoseMessage.length > 0) ? winLoseStyling.gameEnded : {}}>
         {board.map((row, rowIdx) => (
-          <div>{row.map((sqState, colIdx) => (
+          <div key={`${rowIdx}`}>
+            {row.map((sqState, colIdx) => (
             <Square
+            key={`${rowIdx}, ${colIdx}`}
               squareState={sqState}
               rowIndex={rowIdx}
               colIndex={colIdx}
               onClick={() => handleClick(rowIdx, colIdx)} 
               onContextMenu={() => handleRightClick(rowIdx, colIdx)}
               />
-          ))}</div>
+            ))}
+          </div>
         ))}
+      </div>
+      <div>
+        <button style={{fontSize: "calc(10px + 2vmin)", marginTop: "20px"}} onClick={() => window.location.reload(false)}>Reset</button>
       </div>
     </div>
   );
