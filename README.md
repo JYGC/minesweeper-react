@@ -1,4 +1,3 @@
 Minesweeper in react
 
-Try it out here:
-[link](doc:https://jygc.github.io/minesweeper-react/)
+<a href="https://jygc.github.io/minesweeper-react/" target="_blank">Try it out here.</a>
